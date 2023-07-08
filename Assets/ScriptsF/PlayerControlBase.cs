@@ -2,15 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static Cinemachine.DocumentationSortingAttribute;
 
 public class PlayerControlBase : MonoBehaviour
 {
+    // Variables de movimiento
+    [Header("Movement")]
     public float moveSpeed = 5f;
     public float dashSpeed = 10f;
     public float dashDuration = 0.2f;
     public float dashCooldown = 1f;
-    public float fireDelay = 0.5f;
 
+    private Vector2 initialPosition;
     private CustomInput input = null;
     private Rigidbody2D rb;
     private Vector2 moveDirection;
@@ -20,19 +23,49 @@ public class PlayerControlBase : MonoBehaviour
     private Vector2 minCameraPos;
     private Vector2 maxCameraPos;
 
-    public Transform shootOrigin;
-    public GameObject shootPrefab;
+    // Variables de disparo
+    [Header("Shooting")]
+    public float fireDelay = 0.5f;
     private bool isFiring = false;
     private float lastFire = 0.0f;
+    public Transform shootOriginCenter;
+    public GameObject shootPrefabCenter;
+    public Transform shootOriginLeft;
+    public GameObject shootPrefabLeft;
+    public Transform shootOriginRight;
+    public GameObject shootPrefabRight;
+
+    // Variables de escudo
+    [Header("Shield")]
+    public GameObject shield;
+    private bool hasShield = false;
+
+    // Variables de invencibilidad
+    [Header("Invincibility")]
+    public int hits = 3;
+    private bool invincible = false;
+    private float invincibleTimer = 0;
+    public float invincibleTime = 2;
+
+    // Variables de power-ups
+    private bool hasDashPowerUp = false;
+    private bool hasTripleShootPowerUp = false;
+
+    // Referencia al SpriteRenderer
+    public SpriteRenderer spriteRenderer;
 
     private void Awake()
     {
+        initialPosition = transform.position;
         input = new CustomInput();
         rb = GetComponent<Rigidbody2D>();
+        spriteRenderer = transform.Find("Sprite").GetComponent<SpriteRenderer>();
     }
 
     private void Start()
     {
+        shield = transform.Find("Shield").gameObject;
+        DeactivateShield();
         mainCamera = Camera.main;
         CalculateCameraBounds();
     }
@@ -53,7 +86,25 @@ public class PlayerControlBase : MonoBehaviour
 
         if (isFiring && CanFire())
         {
-            Fire();
+            if (hasTripleShootPowerUp)
+                FireTripleShoot();
+            else
+                Fire();
+        }
+
+        if (invincible)
+        {
+            if (invincibleTimer >= invincibleTime)
+            {
+                invincibleTimer = 0;
+                invincible = false;
+                spriteRenderer.enabled = true;
+            }
+            else
+            {
+                invincibleTimer += Time.deltaTime;
+                spriteRenderer.enabled = !spriteRenderer.enabled;
+            }
         }
     }
 
@@ -89,26 +140,56 @@ public class PlayerControlBase : MonoBehaviour
 
     private void OnDashPerformed(InputAction.CallbackContext context)
     {
-        if (!isDashing && !isDashCooldown)
+        if (hasDashPowerUp && !isDashing && !isDashCooldown)
         {
-            StartCoroutine(Dash());
+            StartCoroutine(StartDashCoroutine());
         }
     }
 
-    private IEnumerator Dash()
+    private void OnFirePerformed(InputAction.CallbackContext context)
     {
-        isDashing = true;
-        rb.velocity = moveDirection * dashSpeed;
-        yield return new WaitForSeconds(dashDuration);
-        rb.velocity = Vector2.zero;
-        isDashing = false;
+        isFiring = true;
     }
 
-    private IEnumerator DashCooldown()
+    private void OnFireCancelled(InputAction.CallbackContext context)
     {
-        isDashCooldown = true;
-        yield return new WaitForSeconds(dashCooldown);
-        isDashCooldown = false;
+        isFiring = false;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        BulletLogic bullet = collision.GetComponent<BulletLogic>();
+        if (bullet != null)
+        {
+            if (bullet.isEnemy)
+            {
+                Hit(bullet.gameObject);
+            }
+        }
+
+        EnemyManagement destructable = collision.GetComponent<EnemyManagement>();
+        if (destructable != null)
+        {
+            Hit(destructable.gameObject);
+        }
+        PowerUpData powerUp = collision.GetComponent<PowerUpData>();
+        if (powerUp)
+        {
+            if (powerUp.activateShield)
+            {
+                ActivateShield();
+            }
+            if (powerUp.dashSkill)
+            {
+                hasDashPowerUp = true;
+            }
+            if (powerUp.tripleShoot)
+            {
+                hasTripleShootPowerUp = true;
+            }
+            LevelManager.instance.AddScore(powerUp.pointValue);
+            Destroy(powerUp.gameObject);
+        }
     }
 
     private void CalculateCameraBounds()
@@ -137,16 +218,96 @@ public class PlayerControlBase : MonoBehaviour
     private void Fire()
     {
         lastFire = Time.time;
-        Instantiate(shootPrefab, shootOrigin.position, Quaternion.identity);
+        Instantiate(shootPrefabCenter, shootOriginCenter.position, Quaternion.identity);
     }
 
-    private void OnFirePerformed(InputAction.CallbackContext context)
+    private void FireTripleShoot()
     {
-        isFiring = true;
+        lastFire = Time.time;
+        Instantiate(shootPrefabLeft, shootOriginLeft.position, Quaternion.identity);
+        Instantiate(shootPrefabCenter, shootOriginCenter.position, Quaternion.identity);
+        Instantiate(shootPrefabRight, shootOriginRight.position, Quaternion.identity);
     }
 
-    private void OnFireCancelled(InputAction.CallbackContext context)
+    private void ActivateShield()
     {
-        isFiring = false;
+        shield.SetActive(true);
+    }
+
+    private void DeactivateShield()
+    {
+        shield.SetActive(false);
+    }
+    bool HasShield()
+    {
+        return shield.activeSelf;
+    }
+    void Hit(GameObject gameObjectHit)
+    {
+        if (HasShield())
+        {
+            DeactivateShield();
+        }
+        else
+        {
+            if (!invincible)
+            {
+                hits--;
+                if (hits == 0)
+                {
+                    ResetShip();
+                }
+                else
+                {
+                    invincible = true;
+                }
+            }
+        }
+    }
+
+    private void ResetShip()
+    {
+        transform.position = initialPosition;
+        DeactivateShield();
+        StartDashCoroutine();
+        hasTripleShootPowerUp = false;
+        hits = 3;
+        LevelManager.instance.ResetLevel();
+    }
+
+    private IEnumerator Dash()
+    {
+        isDashing = true;
+        rb.velocity = moveDirection * dashSpeed;
+        yield return new WaitForSeconds(dashDuration);
+        rb.velocity = Vector2.zero;
+        isDashing = false;
+    }
+
+    private IEnumerator DashCooldown()
+    {
+        isDashCooldown = true;
+        yield return new WaitForSeconds(dashCooldown);
+        isDashCooldown = false;
+    }
+
+    private IEnumerator StartDashCoroutine()
+    {
+        if (!isDashing && !isDashCooldown)
+        {
+            isDashing = true;
+            rb.velocity = moveDirection * dashSpeed;
+            yield return new WaitForSeconds(dashDuration);
+            rb.velocity = Vector2.zero;
+            isDashing = false;
+            StartCoroutine(DashCooldownCoroutine());
+        }
+    }
+
+    private IEnumerator DashCooldownCoroutine()
+    {
+        isDashCooldown = true;
+        yield return new WaitForSeconds(dashCooldown);
+        isDashCooldown = false;
     }
 }

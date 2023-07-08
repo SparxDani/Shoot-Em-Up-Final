@@ -228,7 +228,7 @@ GameObject:
   - component: {fileID: 6974080768624402041}
   m_Layer: 0
   m_Name: bullet 1
-  m_TagString: Untagged
+  m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -241,7 +241,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8942218804597975431}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.5, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -266,6 +266,8 @@ MonoBehaviour:
   lifetime: 2
   audioSource: {fileID: 1831309070571180077}
   shootSound: {fileID: 8300000, guid: 4bf3f492a8ac3d942837def14b3fe193, type: 3}
+  isEnemy: 0
+  direction: {x: 0, y: 1}
 --- !u!58 &7424897929325380626
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -276,7 +278,7 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -342,6 +344,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  tagsToIgnore:
+  - Player
+  - Bullet
 --- !u!114 &6974080768624402041
 MonoBehaviour:
   m_ObjectHideFlags: 0

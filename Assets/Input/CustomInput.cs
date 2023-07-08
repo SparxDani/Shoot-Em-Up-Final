@@ -47,12 +47,12 @@ public partial class @CustomInput: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Fire"",
-                    ""type"": ""Value"",
-                    ""id"": ""14d24444-4ac1-4ee1-97fb-c4b83a885173"",
-                    ""expectedControlType"": """",
+                    ""type"": ""Button"",
+                    ""id"": ""37608a23-f666-452c-81dd-d176d07524cd"",
+                    ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": true
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -124,7 +124,7 @@ public partial class @CustomInput: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""7df10182-f464-4af1-a5b0-253b8c0bfe84"",
+                    ""id"": ""b50b0018-2511-4e19-8fac-906fe3d4bd6b"",
                     ""path"": ""<Keyboard>/p"",
                     ""interactions"": """",
                     ""processors"": """",

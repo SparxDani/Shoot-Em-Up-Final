@@ -90,14 +90,14 @@ MonoBehaviour:
     overrideState: 1
     value: 3.41
   threshold:
-    overrideState: 0
+    overrideState: 1
     value: 1
   softKnee:
     overrideState: 1
     value: 0.645
   clamp:
     overrideState: 0
-    value: 65472
+    value: 65399.2
   diffusion:
     overrideState: 0
     value: 7

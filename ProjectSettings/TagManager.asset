@@ -6,11 +6,17 @@ TagManager:
   tags:
   - FxTemporaire
   - LevelLimit
+  - PowerUp
+  - Projectile
+  - Bullet
+  - Destroyer
+  - Enemy
+  - UI
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - NO RP
   - Water
   - UI
   - DestroyableAsteroid
