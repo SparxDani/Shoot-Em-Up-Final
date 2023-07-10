@@ -5,32 +5,28 @@ using static Cinemachine.DocumentationSortingAttribute;
 
 public class EnemyManagement : MonoBehaviour
 {
-    public Vector2 moveDirection;      // Dirección en la que se mueve el enemigo
-    public float moveSpeed;            // Velocidad de movimiento del enemigo
-    public bool autoShoot;             // Indica si el enemigo dispara automáticamente
-    public float fireRate;             // Cadencia de disparo del enemigo (disparos por segundo)
-    public GameObject bulletPrefab;    // Prefab del proyectil que dispara el enemigo
-    public Transform firePoint;        // Punto de origen de los disparos del enemigo
+    public Vector2 moveDirection;      
+    public float moveSpeed;            
+    public bool autoShoot;             
+    public float fireRate;            
+    public GameObject bulletPrefab;  
+    public Transform firePoint;        
     public GameObject explosion;
     public int scoreValue = 100;
 
-    private float fireDelay;            // Retardo entre disparos
-    private float nextFireTime;         // Tiempo en el que se realizará el siguiente disparo
-    private bool canBeDestroyed = false;
+    protected float fireDelay;            
+    protected float nextFireTime; 
+    protected bool canBeDestroyed = false;
     protected bool collidedWithDestroyer = false;
 
     private void Start()
     {
-        // Calcula el retardo inicial entre disparos
         fireDelay = 1f / fireRate;
-        // Calcula el tiempo del próximo disparo
         nextFireTime = Time.time + fireDelay;
-        LevelManager.instance.AddDestructable();
     }
 
     private void Update()
     {
-        // Mueve el enemigo en la dirección especificada
         transform.Translate(moveDirection * moveSpeed * Time.deltaTime);
 
         if (collidedWithDestroyer)
@@ -39,18 +35,15 @@ public class EnemyManagement : MonoBehaviour
             collidedWithDestroyer = false;
         }
 
-        // Si está habilitado el disparo automático y ha pasado suficiente tiempo, dispara
         if (autoShoot && Time.time >= nextFireTime)
         {
             Shoot();
-            // Actualiza el tiempo del próximo disparo
             nextFireTime = Time.time + fireDelay;
         }
     }
 
-    private void Shoot()
+    protected void Shoot()
     {
-        // Instancia el proyectil en la posición del firePoint y con su rotación
         Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
     }
 
@@ -80,8 +73,6 @@ public class EnemyManagement : MonoBehaviour
     protected void DestroyDestructable()
     {
         Instantiate(explosion, transform.position, Quaternion.identity);
-
-        LevelManager.instance.RemoveDestructable();
         Destroy(gameObject);
     }
 }

@@ -125,11 +125,11 @@ AudioSource:
   m_GameObject: {fileID: 4993624694628093153}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 228110813765325619, guid: a5bcb6bbb12259040bc9af9a4a2cb7e0, type: 2}
   m_audioClip: {fileID: 8300000, guid: 4bf3f492a8ac3d942837def14b3fe193, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
-  m_Pitch: 1
+  m_Volume: 0.504
+  m_Pitch: 0.8
   Loop: 0
   Mute: 0
   Spatialize: 0
@@ -266,6 +266,7 @@ MonoBehaviour:
   lifetime: 2
   audioSource: {fileID: 1831309070571180077}
   shootSound: {fileID: 8300000, guid: 4bf3f492a8ac3d942837def14b3fe193, type: 3}
+  isEnemy: 0
   direction: {x: 0.2, y: 1}
 --- !u!58 &7424897929325380626
 CircleCollider2D:

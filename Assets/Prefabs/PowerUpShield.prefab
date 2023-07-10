@@ -47,8 +47,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a95e4cb8cbf5474e9ad04520e2383c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 0
-  pointValue: 1000
+  moveSpeed: 2
+  pointValue: 0
   activateShield: 1
   tripleShoot: 0
   dashSkill: 0

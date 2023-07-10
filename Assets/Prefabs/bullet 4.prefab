@@ -125,13 +125,13 @@ AudioSource:
   m_GameObject: {fileID: 4993624694628093153}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 228110813765325619, guid: a5bcb6bbb12259040bc9af9a4a2cb7e0, type: 2}
   m_audioClip: {fileID: 8300000, guid: 4bf3f492a8ac3d942837def14b3fe193, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
-  Mute: 0
+  Mute: 1
   Spatialize: 0
   SpatializePostEffects: 0
   Priority: 128
@@ -241,7 +241,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8942218804597975431}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.5, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -262,12 +262,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9fd0d16fa7f87e459662d5db0660e1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0
+  speed: 7
   lifetime: 2
   audioSource: {fileID: 1831309070571180077}
   shootSound: {fileID: 8300000, guid: 4bf3f492a8ac3d942837def14b3fe193, type: 3}
   isEnemy: 1
-  direction: {x: 0, y: 0}
+  direction: {x: 0, y: -1}
 --- !u!58 &7424897929325380626
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -345,7 +345,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   tagsToIgnore:
-  - Player
+  - Enemy
   - Bullet
 --- !u!114 &6974080768624402041
 MonoBehaviour:

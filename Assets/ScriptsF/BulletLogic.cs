@@ -11,7 +11,7 @@ public class BulletLogic : MonoBehaviour
     public bool isEnemy = false;
 
     private Rigidbody2D rb;
-    [SerializeField]public Vector2 direction = Vector2.up; // Dirección por defecto hacia arriba
+    [SerializeField] public Vector2 direction = Vector2.up; // Dirección por defecto hacia arriba
 
     public void SetDirection(Vector2 newDirection)
     {
@@ -37,6 +37,14 @@ public class BulletLogic : MonoBehaviour
         if (audioSource != null && shootSound != null)
         {
             audioSource.PlayOneShot(shootSound);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("BulletDestroyer"))
+        {
+            Destroy(gameObject);
         }
     }
 }

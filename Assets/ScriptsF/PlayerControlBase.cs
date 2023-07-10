@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using static Cinemachine.DocumentationSortingAttribute;
-
+using UnityEngine.UI;
 public class PlayerControlBase : MonoBehaviour
 {
     // Variables de movimiento
@@ -38,14 +37,14 @@ public class PlayerControlBase : MonoBehaviour
     // Variables de escudo
     [Header("Shield")]
     public GameObject shield;
-    private bool hasShield = false;
 
     // Variables de invencibilidad
     [Header("Invincibility")]
-    public int hits = 3;
+    public int lifes = 5;
+    public Text lifesText;
     private bool invincible = false;
     private float invincibleTimer = 0;
-    public float invincibleTime = 2;
+    public float invincibleTime = 3;
 
     // Variables de power-ups
     private bool hasDashPowerUp = false;
@@ -53,6 +52,8 @@ public class PlayerControlBase : MonoBehaviour
 
     // Referencia al SpriteRenderer
     public SpriteRenderer spriteRenderer;
+    [SerializeField] Canvas canvasPause;
+    bool isPaused = true;
 
     private void Awake()
     {
@@ -64,6 +65,7 @@ public class PlayerControlBase : MonoBehaviour
 
     private void Start()
     {
+        UpdateLifesText();
         shield = transform.Find("Shield").gameObject;
         DeactivateShield();
         mainCamera = Camera.main;
@@ -116,6 +118,8 @@ public class PlayerControlBase : MonoBehaviour
         input.Ingame.Dash.performed += OnDashPerformed;
         input.Ingame.Fire.performed += OnFirePerformed;
         input.Ingame.Fire.canceled += OnFireCancelled;
+        input.Ingame.Settings.performed += OnPause;
+
     }
 
     private void OnDisable()
@@ -126,19 +130,25 @@ public class PlayerControlBase : MonoBehaviour
         input.Ingame.Dash.performed -= OnDashPerformed;
         input.Ingame.Fire.performed -= OnFirePerformed;
         input.Ingame.Fire.canceled -= OnFireCancelled;
-    }
+        input.Ingame.Settings.performed -= OnPause;
 
-    private void OnMovementPerformed(InputAction.CallbackContext context)
+    }
+    private void OnPause(InputAction.CallbackContext menu)
     {
-        moveDirection = context.ReadValue<Vector2>();
+        Debug.Log("Hola");
+        Pause();
+    }
+    private void OnMovementPerformed(InputAction.CallbackContext moveOn)
+    {
+        moveDirection = moveOn.ReadValue<Vector2>();
     }
 
-    private void OnMovementCancelled(InputAction.CallbackContext context)
+    private void OnMovementCancelled(InputAction.CallbackContext moveOff)
     {
         moveDirection = Vector2.zero;
     }
 
-    private void OnDashPerformed(InputAction.CallbackContext context)
+    private void OnDashPerformed(InputAction.CallbackContext dash)
     {
         if (hasDashPowerUp && !isDashing && !isDashCooldown)
         {
@@ -146,12 +156,12 @@ public class PlayerControlBase : MonoBehaviour
         }
     }
 
-    private void OnFirePerformed(InputAction.CallbackContext context)
+    private void OnFirePerformed(InputAction.CallbackContext fireOn)
     {
         isFiring = true;
     }
 
-    private void OnFireCancelled(InputAction.CallbackContext context)
+    private void OnFireCancelled(InputAction.CallbackContext fireOff)
     {
         isFiring = false;
     }
@@ -190,6 +200,10 @@ public class PlayerControlBase : MonoBehaviour
             LevelManager.instance.AddScore(powerUp.pointValue);
             Destroy(powerUp.gameObject);
         }
+        if (collision.CompareTag("Finish"))
+        {
+            LevelManager.instance.LoadNextLevel();
+        }
     }
 
     private void CalculateCameraBounds()
@@ -209,7 +223,21 @@ public class PlayerControlBase : MonoBehaviour
         float clampedY = Mathf.Clamp(rb.position.y, minCameraPos.y, maxCameraPos.y);
         rb.position = new Vector2(clampedX, clampedY);
     }
-
+    private void Pause()
+    {
+        if (isPaused == true)
+        {
+            Time.timeScale = 0;
+            canvasPause.gameObject.SetActive(true);
+            isPaused = false;
+        }
+        else if (isPaused == false)
+        {
+            Time.timeScale = 1;
+            canvasPause.gameObject.SetActive(false);
+            isPaused = true;
+        }
+    }
     private bool CanFire()
     {
         return Time.time >= lastFire + fireDelay;
@@ -247,13 +275,14 @@ public class PlayerControlBase : MonoBehaviour
         if (HasShield())
         {
             DeactivateShield();
+            
         }
         else
         {
             if (!invincible)
             {
-                hits--;
-                if (hits == 0)
+                lifes--;
+                if (lifes == 0)
                 {
                     ResetShip();
                 }
@@ -261,8 +290,14 @@ public class PlayerControlBase : MonoBehaviour
                 {
                     invincible = true;
                 }
+                Destroy(gameObjectHit);
             }
         }
+        UpdateLifesText();
+    }
+    void UpdateLifesText()
+    {
+        lifesText.text = "Lifes: " + lifes.ToString();
     }
 
     private void ResetShip()
@@ -271,7 +306,7 @@ public class PlayerControlBase : MonoBehaviour
         DeactivateShield();
         StartDashCoroutine();
         hasTripleShootPowerUp = false;
-        hits = 3;
+        lifes = 3;
         LevelManager.instance.ResetLevel();
     }
 
@@ -310,4 +345,5 @@ public class PlayerControlBase : MonoBehaviour
         yield return new WaitForSeconds(dashCooldown);
         isDashCooldown = false;
     }
+
 }
