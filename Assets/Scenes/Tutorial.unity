@@ -10658,6 +10658,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startNextLevel: 0
   scoreText: {fileID: 1369793996}
+  scoreControl: {fileID: 11400000, guid: 7221756d733b4174fb1d42a1b17f1131, type: 2}
 --- !u!4 &927370343
 Transform:
   m_ObjectHideFlags: 0
@@ -11525,7 +11526,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8858127889420118793, guid: 4754153c09c0a4b4e86be87b6e46e781, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.55
+      value: 30.15
       objectReference: {fileID: 0}
     - target: {fileID: 8858127889420118793, guid: 4754153c09c0a4b4e86be87b6e46e781, type: 3}
       propertyPath: m_LocalPosition.z
@@ -12153,11 +12154,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ab2c886f5887f384cb9cec8947900dc0, type: 3}
---- !u!1 &1082589301 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5994156582423863868, guid: f6ecbd89a8d88b94fbd7cbb0a3082001, type: 3}
-  m_PrefabInstance: {fileID: 938091088}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1083008980 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3480967332711699060, guid: 7cfb5f183408abc4a85ced4e01a2f21d, type: 3}
@@ -12213,11 +12209,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31c0b254822999842aac2bd6eccb9831, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0
-  shootOrigin: {fileID: 0}
-  shootPrefab: {fileID: 1082589301}
-  shootSound: {fileID: 0}
-  fireDelay: 0.5
 --- !u!114 &1083196524
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12230,7 +12221,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a2aff995d0e0474ab556928eff48abc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
 --- !u!50 &1083196525
 Rigidbody2D:
   serializedVersion: 4
@@ -23800,7 +23790,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5518849288643774557, guid: da2928947324bd946a65a441cdaa22d0, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 143.7
+      value: 142.1
       objectReference: {fileID: 0}
     - target: {fileID: 5518849288643774557, guid: da2928947324bd946a65a441cdaa22d0, type: 3}
       propertyPath: m_LocalPosition.z

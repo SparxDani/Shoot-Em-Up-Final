@@ -28,9 +28,9 @@ public class ScoreControl : ScriptableObject
                 maxScore[0] = newScore;
             }
         }
-        BurbleSortOrden();
+        BubbleSortOrden();
     }
-    public void BurbleSortOrden()
+    public void BubbleSortOrden()
     {
         int tmp;
         bool isSorted;

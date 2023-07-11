@@ -11,12 +11,11 @@ public class LevelManager : MonoBehaviour
     int numDestructables = 0;
     public bool startNextLevel = false;
     float nextLevelTimer = 3;
-
     string[] levels = { "Tutorial", "Level 1", "Level 2", "Level 3" };
     int currentLevel = 0;
-
     int score = 0;
     public Text scoreText;
+    public ScoreControl scoreControl;
 
     private void Awake()
     {
@@ -89,11 +88,12 @@ public class LevelManager : MonoBehaviour
 
     public void ResetLevel()
     {
-        //SaveScore(score);
+        scoreControl.RegistryNewScore(score); 
         score = 0;
         AddScore(score);
         LoadLevel(currentLevel);
     }
+
 
     public void AddScore(int amountToAdd)
     {
