@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c22df8daa4372254a9ff136ae6310439, type: 3}
   m_Name: PuntajeSO
   m_EditorClassIdentifier: 
-  maxScore: 0000000000000000000000000000000000000000
+  topScore: d0070000781e0000781e00000000000000000000

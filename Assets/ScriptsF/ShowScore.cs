@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class ShowScore : MonoBehaviour
 {
     public Text scoreListText;
-    public ScoreControl scoreControl; // Asigna una instancia de ScoreControl en el Inspector de Unity o mediante código
+    public ScoreControl scoreControl;
 
     void Start()
     {
@@ -27,7 +27,7 @@ public class ShowScore : MonoBehaviour
 
         for (int i = 0; i < scoreControl.topScore.Length; i++)
         {
-            scoreList += (i + 1) + ". " + scoreControl.topScore[i] + "\n";
+            scoreList += (i + 1) + ". " + scoreControl.topScore[(4-i)] + "\n";
         }
 
         scoreListText.text = scoreList;

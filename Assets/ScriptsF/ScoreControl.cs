@@ -11,7 +11,7 @@ public class ScoreControl : ScriptableObject
     {
         if (topScore == null)
         {
-            topScore = new int[10];
+            topScore = new int[5];
         }
     }
     public void RegistryNewScore(int newScore)
