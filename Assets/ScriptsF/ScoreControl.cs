@@ -2,54 +2,51 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-[CreateAssetMenu(fileName = "PuntajeSO", menuName = "ScriptableObjects/PuntajeSO", order = 2)]
+[CreateAssetMenu(fileName = "PuntajeSO", menuName = "Puntajes/Nuevo Adm. Puntajes", order = 1)]
 public class ScoreControl : ScriptableObject
 {
-    [SerializeField] public int[] maxScore;
+    [SerializeField] public int[] topScore;
     int k = 0;
     public void OnEnable()
     {
-        if (maxScore == null)
+        if (topScore == null)
         {
-            maxScore = new int[10];
+            topScore = new int[10];
         }
     }
     public void RegistryNewScore(int newScore)
     {
         if (k < 10)
         {
-            maxScore[k] = newScore;
+            topScore[k] = newScore;
             k++;
         }
         else
         {
-            if (newScore > maxScore[0])
+            if (newScore > topScore[0])
             {
-                maxScore[0] = newScore;
+                topScore[0] = newScore;
             }
         }
-        BubbleSortOrden();
+        SelectionSortOrden();
     }
-    public void BubbleSortOrden()
+    public void SelectionSortOrden()
     {
-        int tmp;
-        bool isSorted;
-        for (int i = 0; i < maxScore.Length - 1; i++)
+        for (int i = 0; i < topScore.Length - 1; i++)
         {
-            isSorted = true;
-            for (int j = 0; j < maxScore.Length - i - 1; j++)
+            int minIndex = i;
+            for (int j = i + 1; j < topScore.Length; j++)
             {
-                if (maxScore[j] > maxScore[j + 1])
+                if (topScore[j] < topScore[minIndex])
                 {
-                    tmp = maxScore[j];
-                    maxScore[j] = maxScore[j + 1];
-                    maxScore[j + 1] = tmp;
-                    isSorted = false;
+                    minIndex = j;
                 }
             }
-            if (isSorted)
+            if (minIndex != i)
             {
-                break;
+                int tmp = topScore[i];
+                topScore[i] = topScore[minIndex];
+                topScore[minIndex] = tmp;
             }
         }
     }

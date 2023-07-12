@@ -108,6 +108,7 @@ public class PlayerControlBase : MonoBehaviour
                 spriteRenderer.enabled = !spriteRenderer.enabled;
             }
         }
+        
     }
 
     private void OnEnable()
@@ -223,7 +224,7 @@ public class PlayerControlBase : MonoBehaviour
         float clampedY = Mathf.Clamp(rb.position.y, minCameraPos.y, maxCameraPos.y);
         rb.position = new Vector2(clampedX, clampedY);
     }
-    private void Pause()
+    protected void Pause()
     {
         if (isPaused == true)
         {
